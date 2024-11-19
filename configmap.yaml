@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-config
+# data 필드에 선언된 데이터는 키-값 쌍(key-value pairs) 형태로 저장되며, Kubernetes에서 이를 마운트하면 키가 파일 이름이 되고 값이 파일의 내용이 된다
+data:
+  # 값 앞에 '|' 가 붙은 이유는 블록 문자열을 나타내는 구문임, 문자열을 여러 줄로 작성할 때 사용
+  index.html: |
+    <html>
+    <head><title>Kubernetes ConfigMap</title></head>
+    <body>
+      <h1>Hello from ConfigMap</h1>
+    </body>
+    </html>
