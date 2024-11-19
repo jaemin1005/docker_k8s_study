@@ -1,0 +1,55 @@
+# Deployment 리소스는 애플리케이션의 Pod(컨테이너 그룹)를 관리하는 역할을 합니다.
+apiVersion: apps/v1 # 이 Deployment가 사용하는 API 버전 (Kubernetes의 표준)
+kind: Deployment # 리소스의 종류를 지정 (Deployment는 Pod의 생성과 관리를 담당)
+metadata:
+  name: test-nginx-deployment # Deployment의 이름, Kubernetes 클러스터 내에서 유일해야 함
+spec:
+  replicas: 1 # 생성할 Pod의 개수를 지정 (여기서는 1개의 Pod 생성)
+  selector:
+    matchLabels:
+      app: test-nginx # Pod를 식별할 Label 지정 (Deployment와 Pod가 연결됨)
+  template:
+    metadata:
+      labels:
+        app: test-nginx # Pod에 할당될 Label 정의 (Deployment와 연결을 위해 동일해야 함)
+    spec:
+      containers:
+        - name: test-nginx # 컨테이너의 이름
+          image: test-nginx:1.0 # 사용할 Docker 이미지 이름과 태그
+          ports:
+            - containerPort: 80 # 컨테이너 내부에서 열릴 포트 (NGINX 기본 포트)
+---
+# Service 리소스는 Pod를 외부 네트워크와 연결하거나 내부 Pod 간 통신을 지원합니다.
+apiVersion: v1 # Service 리소스가 사용하는 API 버전
+kind: Service # 리소스의 종류를 지정 (여기서는 Service)
+metadata:
+  name: test-nginx-service # Service의 이름, Kubernetes 클러스터 내에서 유일해야 함
+spec:
+  selector:
+    app: test-nginx # 이 Service가 연결할 Pod를 Label로 지정 (Deployment와 연결됨)
+  ports:
+    - protocol: TCP # 통신 프로토콜 (HTTP는 TCP 기반으로 동작)
+      port: 80 # Service에서 노출할 포트 (외부 클라이언트가 접근하는 포트)
+      targetPort: 80 # Pod 내부에서 실제로 동작하는 포트 (컨테이너의 포트)
+  type: LoadBalancer # 외부 네트워크에 접근 가능하도록 LoadBalancer 타입 설정
+
+##
+# kubectl apply -f nginx-deployment.yaml
+# apply : 쿠버네티스 클러스터에 적용
+# -f : -f는 파일 경로를 지정하는 옵션입
+##
+##
+# kubectl get deployments 
+# Deployment 상태 확인
+# od의 생성을 관리하고 상태를 유지합니다. Pod를 원하는 상태로 자동으로 복구, 업데이트, 확장하거나 축소가 가능하다.
+##
+##
+# kubectl get services
+# Service 상태 확인
+# Service는 네트워크를 통해 Pod에 접근하기 위한 엔드포인트를 제공. Pod는 언제든지 생성되거나 종료될 수 있으므로 IP가 동적으로 변경되는데, Service는 이러한 동적인 Pod를 안정적으로 연결할 수 있도록 도와준다.
+##
+##
+# kubectl get pods
+# pod 상태 확인
+# 애플리케이션을 실행하는 기본 단위.
+##
