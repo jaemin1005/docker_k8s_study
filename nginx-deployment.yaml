@@ -53,3 +53,11 @@ spec:
 # pod 상태 확인
 # 애플리케이션을 실행하는 기본 단위.
 ##
+##
+# kubectl set image deployment/<deployment-name> <container-name>=<new-image>
+# 선택한 컨테이너에 이미지를 업데이트하기
+##
+##
+# kubectl describe deployment <deployment-name>
+# Deployment 상세정보를 볼 수 있다.
+##
